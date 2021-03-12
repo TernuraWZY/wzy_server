@@ -1,4 +1,5 @@
 #include "http_conn.h"
+#include <string.h>
 #include <unordered_map>
 #include <mysql/mysql.h>
 #include <fstream>
@@ -20,7 +21,7 @@ const char* error_500_title = "Internal Error";
 const char* error_500_form = "There was an unusual problem serving the requested file.\n";
 
 /*网站的根目录*/
-char* doc_root;
+extern char* doc_root;
 
 
 // 将表中的用户名和密码放入map，注意是全局变量
@@ -30,9 +31,7 @@ locker m_lock;
 // 这里有个缺陷是每个http连接都需要初始化一个users的哈希表，如果连接数很多占用内存过大
 void http_conn::initmysql_result(connection_pool *connPool)
 {
-	const char *a = "/root"
-	getcwd(doc_root, 100);
-	stract(doc_root, a);
+
 	// 1. 从连接池取出一个连接
 	MYSQL *mysql = nullptr;
 	// connectionRAII构造函数中从connPool连接池取出了一个连接对mysql初始化，初始化结束后connectionRAII对象析构，释放连接

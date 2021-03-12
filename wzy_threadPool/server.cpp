@@ -42,7 +42,7 @@ extern int setnonblocking(int fd);
 static int pipefd[2];
 static sort_timer_lst timer_lst;
 static int epollfd = 0;
-
+char *doc_root;
 // 信号处理函数
 void sig_handler(int sig)
 {
@@ -100,6 +100,11 @@ void show_error(int connfd, const char *info)
 
 int main(int argc, char *argv[])
 {
+    // 通过相对路径获取资源路径，省去手动设置
+	const char *a = "/root";
+	doc_root = getcwd(NULL, 100);
+	strcat(doc_root, a);  
+
 #ifdef ASYNLOG
     Log::get_instance()->init("ServerLog", 2000, 800000, 8);
 #endif
@@ -107,6 +112,7 @@ int main(int argc, char *argv[])
 #ifdef SYNLOG
     Log::get_instance()->init("ServerLog", 2000, 800000, 0);
 #endif
+
 
 
     if(argc <= 2)
@@ -117,7 +123,6 @@ int main(int argc, char *argv[])
     const char *ip = argv[1];
     int port = atoi(argv[2]);
 
-    doc_root = 
     // 忽略sigpipe信号
     addsig(SIGPIPE, SIG_IGN);
 
