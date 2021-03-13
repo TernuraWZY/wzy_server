@@ -98,13 +98,17 @@ void show_error(int connfd, const char *info)
     close(connfd);
 }
 
-int main(int argc, char *argv[])
-{
     // 通过相对路径获取资源路径，省去手动设置
+void init_path()
+{
 	const char *a = "/root";
 	doc_root = getcwd(NULL, 100);
 	strcat(doc_root, a);  
+}
 
+int main(int argc, char *argv[])
+{
+    init_path();
 #ifdef ASYNLOG
     Log::get_instance()->init("ServerLog", 2000, 800000, 8);
 #endif
